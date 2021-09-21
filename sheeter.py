@@ -55,9 +55,8 @@ class SpreadSheetHandler:
         try:
             sheet = self.sheets.worksheet(sheet_name)  # Grab the sheet
             sheet.clear()  # Clear the worksheet if it exists
-            set_with_dataframe(sheet, data, include_index=False, include_column_header=True)  # Save the dataframe
         except gspread.WorksheetNotFound:
-            self.sheets.add_worksheet(title=sheet_name, rows=data.shape()[0], cols=data.shape()[1])  # Otherwise reate the new sheet of a fitting size
-            sheet = self.sheets.worksheet(sheet_name)  # Grab the fresh sheet
-            set_with_dataframe(sheet, data, include_index=False, include_column_header=True)  # Save the dataframe
+            self.sheets.add_worksheet(title=sheet_name)  # Otherwise reate the new sheet of a fitting size
+            sheet = self.sheets.worksheet(sheet_name)    # Grab the fresh sheet
+        set_with_dataframe(sheet, data, include_index=False, include_column_header=True)  # Save the dataframe
 
