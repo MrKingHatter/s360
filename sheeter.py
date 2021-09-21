@@ -20,16 +20,14 @@ class SpreadSheetHandler:
     def __init__(self, sheet_link: str, auth: gspread.client.Client):
         self.sheets = auth.open_by_url(sheet_link)  # Grab the sheets from the link
 
-    def grab_sheet(self, sheet_name: str) -> Union[Sheet, None]:
+    def grab_sheet(self, sheet_name: str) -> Union[pd.DataFrame, None]:
         """
         Method for grabbing the data from a given sheet as a pandas DataFrame
         """
-        new_sheet = Sheet(sheet_name, [])
         try:
             sheet = self.sheets.worksheet(sheet_name)  # Grab the specified sheet
             sheet_df = pd.DataFrame(sheet.get_all_records())  # Format to pandas DataFrame
-            new_sheet.import_dataframe(sheet_df)
-            return new_sheet
+            return sheet_df
         except gspread.WorksheetNotFound:
             return None
 
