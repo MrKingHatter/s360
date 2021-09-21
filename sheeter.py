@@ -4,21 +4,6 @@ import pandas as pd
 from typing import Union, List
 
 
-class Sheet:
-    def __init__(self, name: str, columns: List[str]):
-        self.name = name
-        self.sheet = pd.DataFrame(columns=columns)
-
-    def import_dataframe(self, dataframe: pd.DataFrame):
-        self.sheet = dataframe
-
-    def __getitem__(self, key):
-        return self.sheet[key]
-
-    def shape(self):
-        return self.sheet.shape
-
-
 class SpreadSheetHandler:
     """
     Object for handling interactions with Google sheets
