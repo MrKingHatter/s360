@@ -40,7 +40,7 @@ class Async:
            7: 0.9649660284921133, 4: 0.5403023058681398, 4: None}}
     """
 
-    def __init__(self, error: Union[asyncio.TimeoutError, Exception] = asyncio.TimeoutError(), timeout: Union[float, int, None] = None, semaphore: int = 100):
+    def __init__(self, error: Union[asyncio.TimeoutError, Exception] = asyncio.TimeoutError, timeout: Union[float, int, None] = None, semaphore: int = 100):
         """
         Async initializer function
         Arguments:
