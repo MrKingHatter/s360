@@ -13,6 +13,6 @@ class Auth:
         client = gspread.authorize(GoogleCredentials.get_application_default())
         return client
 
-    def re_authenticate() -> gspread.client.Client:
+    def re_authenticate():
         if self.credentials.access_token_expired:
             client.login()  # refreshes the token
