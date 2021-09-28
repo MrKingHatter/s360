@@ -18,8 +18,3 @@ class Auth:
     def re_authenticate(self):
         if self.credentials.access_token_expired:
             self.client.login()  # refreshes the token
-
-
-a = Auth()
-a.authenticate()
-a.re_authenticate()
