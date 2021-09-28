@@ -1,4 +1,4 @@
-!pip install gspread --upgrade
+pip install gspread --upgrade
 
 from google.colab import auth
 import gspread
