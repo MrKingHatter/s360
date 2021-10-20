@@ -6,16 +6,18 @@ def time_me(f: callable, end: str = '\n'):
     message = '{name:} took {timing:.2f}s'
 
     @wraps(f)
-    def wrap(*args, **kwargs):
-        t = time()
-        result = f(*args, **kwargs)
-        print(message.format(name=f.__name__, timing=time() - t), end=end)
-        return result
-    return wrap
+    def __time_me(__f):
+        def wrap(*args):
+            t = time()
+            result = __f(*args)
+            print(message.format(name=__f.__name__, timing=time() - t), end=end)
+            return result
+        return wrap
+    return __time_me
 
 
 if __name__ == '__main__':
-    @time_me
+    @time_me('')
     def test(n):
         sleep(n)
 
