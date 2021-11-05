@@ -54,7 +54,7 @@ class SpreadSheetHandler:
             self.sheets.add_worksheet(title=sheet_name, rows=data.shape[0], cols=data.shape[1])  # Otherwise reate the new sheet of a fitting size
             sheet = self.sheets.worksheet(sheet_name)  # Grab the fresh sheet
         set_with_dataframe(sheet, data, include_index=False, include_column_header=True)  # Save the dataframe
-    
+
     @staticmethod
     def resize_data(data: pd.DataFrame, limit: int) -> pd.DataFrame:
         """
@@ -65,6 +65,6 @@ class SpreadSheetHandler:
         Returns:
             The DataFrame with the cut down size
         """
-        if data.size >= limit:
+        if data.size + data.shape[0] >= limit:
             proper_row_count = limit // data.shape[1]
             return data.drop(data.index[proper_row_count:])
