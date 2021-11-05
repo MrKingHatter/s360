@@ -12,6 +12,7 @@ class SpreadSheetHandler:
     Methods:
         grab_sheet: method for grabbing a specific sheet from the sheets in a pandas DataFrame
         overwrite: method for writing a pandas DataFrame to a sheet
+        resize_data: method for resizing the DataFrame so it doesn't go beyond the limit
     """
 
     def __init__(self, sheet_link: str, auth: gspread.client.Client):
@@ -53,3 +54,17 @@ class SpreadSheetHandler:
             self.sheets.add_worksheet(title=sheet_name, rows=data.shape[0], cols=data.shape[1])  # Otherwise reate the new sheet of a fitting size
             sheet = self.sheets.worksheet(sheet_name)  # Grab the fresh sheet
         set_with_dataframe(sheet, data, include_index=False, include_column_header=True)  # Save the dataframe
+    
+    @staticmethod
+    def resize_data(data: pd.DataFrame, limit: int) -> pd.DataFrame:
+        """
+        Method for resizing the data
+        Arguments:
+            data: The Pandas DataFrame to reshape
+            limit: Integer, the max size of the DataFrame
+        Returns:
+            The DataFrame with the cut down size
+        """
+        if data.size >= limit:
+            proper_row_count = limit // data.shape[1]
+            return data.drop(data.index[proper_row_count:])
