@@ -3,6 +3,11 @@ from functools import wraps
 
 
 def time_me(end: str = '\n'):
+    """
+    Convience decorator with arguments to time the decorated method
+    Arguments:
+        end: The string to end the message with
+    """
     message = '{name:} took {timing:.2f}s'
 
     def __time_me(f):
