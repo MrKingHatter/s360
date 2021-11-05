@@ -48,6 +48,7 @@ class SpreadSheetHandler:
         try:
             sheet = self.sheets.worksheet(sheet_name)  # Grab the sheet
             sheet.clear()  # Clear the worksheet if it exists
+            sheet.resize(rows=data.shape[0], cols=data.shape[1])
         except gspread.WorksheetNotFound:
             self.sheets.add_worksheet(title=sheet_name, rows=data.shape[0], cols=data.shape[1])  # Otherwise reate the new sheet of a fitting size
             sheet = self.sheets.worksheet(sheet_name)  # Grab the fresh sheet
