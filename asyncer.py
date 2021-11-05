@@ -146,7 +146,7 @@ class Async:
             raise self.error  # Raise exception on timeout
 
 
-nest_asyncio.apply()   # Allow ansyncio eventloop nesting
+nest_asyncio.apply()   # Allow asyncio event loop nesting
 
 if __name__ == '__main__':
     example = Async()
