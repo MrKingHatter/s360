@@ -7,22 +7,29 @@ from typing import Union, List
 class SpreadSheetHandler:
     """
     Object for handling interactions with Google sheets
-    Arguments:
-        sheet_link: the link to the google sheets document
-        auth: google authorization key
     Attributes:
-        sheets: gspread object for holding the google sheets document
+        sheets: GSpread object for holding the google sheets document
     Methods:
         grab_sheet: method for grabbing a specific sheet from the sheets in a pandas DataFrame
         overwrite: method for writing a pandas DataFrame to a sheet
     """
 
     def __init__(self, sheet_link: str, auth: gspread.client.Client):
+        """
+        Initializer method
+        Arguments:
+            sheet_link: the link to the google sheets document
+            auth: google authorization key
+        """
         self.sheets = auth.open_by_url(sheet_link)  # Grab the sheets from the link
 
     def grab_sheet(self, sheet_name: str) -> Union[pd.DataFrame, None]:
         """
         Method for grabbing the data from a given sheet as a pandas DataFrame
+        Arguments:
+            sheet_name: string, the name of the sheet ot grab
+        Returns:
+            The sheet with the given name, None if the name does not exist
         """
         try:
             sheet = self.sheets.worksheet(sheet_name)  # Grab the specified sheet
@@ -34,6 +41,9 @@ class SpreadSheetHandler:
     def overwrite(self, sheet_name: str, data: pd.DataFrame):
         """
         Method for overwriting all the data in a given sheet with a new dataframe
+        Arguments:
+            sheet_name: string, the name to save the sheet as
+            data: The pandas DataFrame to save
         """
         try:
             sheet = self.sheets.worksheet(sheet_name)  # Grab the sheet
