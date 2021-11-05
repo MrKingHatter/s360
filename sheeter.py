@@ -56,12 +56,12 @@ class SpreadSheetHandler:
         set_with_dataframe(sheet, data, include_index=False, include_column_header=True)  # Save the dataframe
 
     @staticmethod
-    def resize_data(data: pd.DataFrame, limit: int) -> pd.DataFrame:
+    def resize_data(limit: int, data: pd.DataFrame) -> pd.DataFrame:
         """
         Method for resizing the data
         Arguments:
-            data: The Pandas DataFrame to reshape
             limit: Integer, the max size of the DataFrame
+            data: The Pandas DataFrame to reshape
         Returns:
             The DataFrame with the cut down size
         """
