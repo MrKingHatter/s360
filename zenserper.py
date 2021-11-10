@@ -53,7 +53,7 @@ class ZenSerp:
     def __generic_check(self, response: requests.Response) -> requests.Response:
         if response.ok:
             return response
-        if self.get_status()['remaining requests'] <= 0:
+        if self.get_status()['remaining_requests'] <= 0:
             raise requests.ConnectionError('Api key is out of requests')
         raise requests.ConnectionError('Could not connect to host servers')
 
