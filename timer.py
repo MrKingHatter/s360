@@ -1,4 +1,4 @@
-from time import time, sleep, strftime, gmtime
+import time
 from functools import wraps
 from numpy import nan
 
@@ -14,9 +14,9 @@ def time_me(end: str = '\n'):
     def __time_me(f):
         @wraps(f)
         def wrap(*args):
-            t = time()
+            t = time.time()
             result = f(*args)
-            print(message.format(name=f.__name__, timing=time() - t), end=end)
+            print(message.format(name=f.__name__, timing=time.time() - t), end=end)
             return result
         return wrap
     return __time_me
@@ -33,10 +33,10 @@ class ProgressBar:
         self.sign = sign
 
     def start(self):
-        self.__time = time()
+        self.__time = time.perf_counter()
 
     def __update_time(self):
-        self.__time = time() - self.__time
+        self.__time = time.perf_counter() - self.__time
 
     def get_time(self, update: bool = False) -> float:
         if update:
@@ -52,7 +52,7 @@ class ProgressBar:
     def __str__(self) -> str:
         empty_space = int((self.resolution - self.__progress) / self.resolution * self.length)
         try:
-            remaining_time = strftime('%H:%M:%S', gmtime(self.remaining_time()))
+            remaining_time = time.strftime('%H:%M:%S', time.gmtime(self.remaining_time()))
         except ValueError:
             remaining_time = 'NaN'
         return '[' + self.sign * (self.length - empty_space) + ' ' * empty_space + '] {:.2f} % '.format(self.__progress / self.resolution * 100) + \
@@ -69,7 +69,7 @@ class ProgressBar:
 if __name__ == '__main__':
     @time_me(' ')
     def test(n):
-        sleep(n)
+        time.sleep(n)
 
     test(3)
     test(1)
