@@ -33,10 +33,10 @@ class ProgressBar:
         self.sign = sign
 
     def start(self):
-        self.__time = time.perf_counter()
+        self.__time = time()
 
     def __update_time(self):
-        self.__time = time.perf_counter() - self.__time
+        self.__time = time() - self.__time
 
     def get_time(self, update: bool = False) -> float:
         if update:
