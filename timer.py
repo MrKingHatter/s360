@@ -1,4 +1,4 @@
-from time import time, sleep
+from time import time, sleep, strftime
 from functools import wraps
 from numpy import nan
 
@@ -52,7 +52,7 @@ class ProgressBar:
     def __str__(self) -> str:
         empty_space = int((self.resolution - self.__progress) / self.resolution * self.length)
         try:
-            remaining_time = time.strftime('%H:%M:%S', time.gmtime(self.remaining_time()))
+            remaining_time = strftime('%H:%M:%S', time.gmtime(self.remaining_time()))
         except ValueError:
             remaining_time = 'NaN'
         return '[' + self.sign * (self.length - empty_space) + ' ' * empty_space + '] {:.2f} % '.format(self.__progress / self.resolution * 100) + \
