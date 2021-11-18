@@ -23,7 +23,7 @@ def time_me(end: str = '\n'):
 
 
 class ProgressBar:
-    def __init__(self, target: int, resolution: int = 100, length: int = 20, sign: str = '\u2586'):
+    def __init__(self, target: int, resolution: int = 100, length: int = 20, sign: str = '\u2588'):
         self.__progress = 0
         self.__time = 0
         self.__step = max(1, target // resolution)
