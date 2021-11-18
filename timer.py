@@ -73,3 +73,11 @@ if __name__ == '__main__':
 
     test(3)
     test(1)
+    
+    goal = 10
+    pb = ProgressBar(0)
+    pb.target = goal
+    for i in range(goal):
+        pb.update(i)
+        print(f'\rProgress {pb}', end='')
+        time.sleep(1)
