@@ -47,6 +47,10 @@ class ProgressBar:
             self.__update_time()
         return self.__time
 
+    def set_target(self, target: int):
+        self.target = target
+        self.__step = max(1, target // self.resolution)
+
     def remaining_time(self) -> float:
         x, y = list(zip(*self.__time_record))
         means = (np.mean(x), np.mean(y))
