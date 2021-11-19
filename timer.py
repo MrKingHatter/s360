@@ -1,6 +1,6 @@
 import time
 from functools import wraps
-from numpy import nan, sqrt
+import numpy as np
 
 
 def time_me(end: str = '\n'):
@@ -37,9 +37,9 @@ class ProgressBar:
         self.__time = time.perf_counter()
 
     def __update_time(self):
-        self.__time = time.perf_counter() - self.__time
+        self.start()
         self.__time_record.append((self.__progress, self.__time))
-        if len(self.__time_record) > sqrt(self.resolution):
+        if len(self.__time_record) > np.sqrt(self.resolution):
             self.__time_record.pop(0)
 
     def get_time(self, update: bool = False) -> float:
@@ -48,14 +48,14 @@ class ProgressBar:
         return self.__time
 
     def remaining_time(self) -> float:
-        try:
-            x, y = list(zip(*self.__time_record))
-            x2 = [v**2 for v in x]
-            xy = [v*w for v, w in self.__time_record]
-            b = (sum(xy) - sum(x)*sum(y)) / (sum(x2) - sum(x)**2)
+        x, y = list(zip(*self.__time_record))
+        means = (np.mean(x), np.mean(y))
+        diff_sqs = ([a - means[0] for a in x], [a - means[1] for a in y])
+        if sum(np.square(diff_sqs[0])) > 0:
+            b = sum([a*b for a, b in zip(*diff_sqs)]) / sum(np.square(diff_sqs[0]))
             return b * (100 - self.__progress)
-        except ZeroDivisionError:
-            return nan
+        else:
+            return np.nan
 
     def __str__(self) -> str:
         empty_space = int((self.resolution - self.__progress) / self.resolution * self.length)
@@ -73,7 +73,7 @@ class ProgressBar:
             if prt:
                 print('\r' + self.__str__(), end='')
 
-
+                
 if __name__ == '__main__':
     @time_me(' ')
     def test(n):
