@@ -25,7 +25,7 @@ def time_me(end: str = '\n'):
 class ProgressBar:
     def __init__(self, target: int, resolution: int = 100, length: int = 20, sign: str = '\u2588'):
         self.__progress = 0
-        self.__time = 0
+        self.__time = time.perf_counter()
         self.__step = max(1, target // resolution)
         self.__time_record = []
         self.target = target
@@ -71,12 +71,11 @@ class ProgressBar:
                'Remaining: ' + remaining_time
 
     def update(self, count: int, prt: bool = False):
-        if (count % self.__step) == 0:
+        if ((count % self.__step) == 0) | (count == self.target):
             self.__update_time()
             self.__progress = count / self.target * self.resolution
             if prt:
                 print('\r' + self.__str__(), end='')
-
                 
 if __name__ == '__main__':
     @time_me(' ')
@@ -86,10 +85,19 @@ if __name__ == '__main__':
     test(3)
     test(1)
     
-    goal = 10
+    goal = 350
     pb = ProgressBar(0)
-    pb.target = goal
-    for i in range(goal):
+    pb.set_target(goal)
+    pb.start()
+    for i in range(goal+1):
         pb.update(i)
         print(f'\rProgress {pb}', end='')
-        time.sleep(1)
+        time.sleep(0.02)
+    print()
+    goal = 100
+    pb.set_target(goal)
+    pb.start()
+    for i in range(goal+1):
+        pb.update(i)
+        print(f'\rProgress {pb}', end='')
+        time.sleep(0.1)
