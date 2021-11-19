@@ -1,6 +1,6 @@
 import time
 from functools import wraps
-from numpy import nan
+from numpy import nan, sqrt
 
 
 def time_me(end: str = '\n'):
@@ -27,6 +27,7 @@ class ProgressBar:
         self.__progress = 0
         self.__time = 0
         self.__step = max(1, target // resolution)
+        self.__time_record = []
         self.target = target
         self.resolution = resolution
         self.length = length
@@ -37,6 +38,9 @@ class ProgressBar:
 
     def __update_time(self):
         self.__time = time.perf_counter() - self.__time
+        self.__time_record.append((self.__progress, self.__time))
+        if len(self.__time_record) > sqrt(self.resolution):
+            self.__time_record.pop(0)
 
     def get_time(self, update: bool = False) -> float:
         if update:
@@ -45,7 +49,11 @@ class ProgressBar:
 
     def remaining_time(self) -> float:
         try:
-            return self.get_time() * (self.resolution / self.__progress - 1)  # TODO Timer too fast ?
+            x, y = list(zip(*self.__time_record))
+            x2 = [v**2 for v in x]
+            xy = [v*w for v, w in self.__time_record]
+            b = (sum(xy) - sum(x)*sum(y)) / (sum(x2) - sum(x)**2)
+            return b * (100 - self.__progress)
         except ZeroDivisionError:
             return nan
 
