@@ -68,11 +68,11 @@ class ProgressBar:
             remaining_time = time.strftime('%H:%M:%S', time.gmtime(self.remaining_time()))
         except ValueError:
             remaining_time = 'NaN'
-        return '[' + self.sign * (self.length - empty_space) + ' ' * empty_space + '] {:.2f} % '.format(self.__progress / self.resolution * 100) + \
+        return '[' + self.sign * (self.length - empty_space) + ' ' * empty_space + '] {} % '.format(int(np.ceil(self.__progress / self.resolution * 100))) + \
                'Remaining: ' + remaining_time
 
     def update(self, count: int, prt: bool = False):
-        if ((count % self.__step) == 0) | (count > self.target - 1):
+        if ((count % self.__step) == 0) | (count >= self.target - 1):
             self.__update_time()
             self.__progress = count / self.target * self.resolution
             if prt:
