@@ -50,6 +50,7 @@ class ProgressBar:
     def set_target(self, target: int):
         self.target = target
         self.__step = max(1, target // self.resolution)
+        self.__time_record = []
 
     def remaining_time(self) -> float:
         x, y = list(zip(*self.__time_record))
