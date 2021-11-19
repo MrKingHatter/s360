@@ -72,7 +72,7 @@ class ProgressBar:
                'Remaining: ' + remaining_time
 
     def update(self, count: int, prt: bool = False):
-        if ((count % self.__step) == 0) | (count == self.target):
+        if ((count % self.__step) == 0) | (count > self.target - self.__step):
             self.__update_time()
             self.__progress = count / self.target * self.resolution
             if prt:
