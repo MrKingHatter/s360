@@ -1,6 +1,9 @@
 import time
 from functools import wraps
 import numpy as np
+import cProfile
+import pstats
+from typing import Union
 
 
 def time_me(end: str = '\n'):
@@ -18,8 +21,28 @@ def time_me(end: str = '\n'):
             result = f(*args)
             print(message.format(name=f.__name__, timing=time.time() - t), end=end)
             return result
+
         return wrap
+
     return __time_me
+
+
+def profile(sort: Union[pstats.SortKey, None] = pstats.SortKey.TIME, subcalls: bool = True, builtins: bool = True):
+    def __profile(f):
+        @wraps(f)
+        def wrap(*args):
+            pr = cProfile.Profile(subcalls=subcalls, builtins=builtins)
+            pr.enable()
+            result = f(*args)
+            pr.disable()
+
+            stats = pstats.Stats(pr)
+            if sort is not None:
+                stats.sort_stats(sort)
+            stats.print_stats()
+            return result
+        return wrap
+    return __profile
 
 
 class ProgressBar:
@@ -57,7 +80,7 @@ class ProgressBar:
         means = (np.mean(x), np.mean(y))
         diff_sqs = ([a - means[0] for a in x], [a - means[1] for a in y])
         if sum(np.square(diff_sqs[0])) > 0:
-            b = sum([a*b for a, b in zip(*diff_sqs)]) / sum(np.square(diff_sqs[0]))
+            b = sum([a * b for a, b in zip(*diff_sqs)]) / sum(np.square(diff_sqs[0]))
             return b * (100 - self.__progress)
         else:
             return np.nan
@@ -68,8 +91,8 @@ class ProgressBar:
             remaining_time = time.strftime('%H:%M:%S', time.gmtime(self.remaining_time()))
         except ValueError:
             remaining_time = 'NaN'
-        return '[' + self.sign * (self.length - empty_space) + ' ' * empty_space + '] {} % '.format(int(np.ceil(self.__progress / self.resolution * 100))) + \
-               'Remaining: ' + remaining_time
+        return '[' + self.sign * (self.length - empty_space) + ' ' * empty_space + '] {} % '.format(
+            int(np.ceil(self.__progress / self.resolution * 100))) + 'Remaining: ' + remaining_time
 
     def update(self, count: int, prt: bool = False):
         if ((count % self.__step) == 0) | (count >= self.target - 1):
@@ -77,20 +100,22 @@ class ProgressBar:
             self.__progress = count / self.target * self.resolution
             if prt:
                 print('\r' + self.__str__(), end='')
-                
+
+
 if __name__ == '__main__':
-    @time_me(' ')
+    @time_me()
     def test(n):
         time.sleep(n)
 
+
     test(3)
     test(1)
-    
+
     goal = 350
     pb = ProgressBar(0)
     pb.set_target(goal)
     pb.start()
-    for i in range(goal+1):
+    for i in range(goal + 1):
         pb.update(i)
         print(f'\rProgress {pb}', end='')
         time.sleep(0.02)
@@ -98,7 +123,7 @@ if __name__ == '__main__':
     goal = 100
     pb.set_target(goal)
     pb.start()
-    for i in range(goal+1):
+    for i in range(goal + 1):
         pb.update(i)
         print(f'\rProgress {pb}', end='')
         time.sleep(0.1)
