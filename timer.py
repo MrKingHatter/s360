@@ -28,6 +28,13 @@ def time_me(end: str = '\n'):
 
 
 def profile(sort: Union[pstats.SortKey, None] = pstats.SortKey.TIME, subcalls: bool = True, builtins: bool = True):
+    """
+    Convience decorator with arguments to profile a method
+    Arguments:
+        sort: How to sort the profile stats
+        subcalls: bool, if True, then subcalls are included in the profile
+        builtins: bool, if True, then builtins are included in the profile
+    """
     def __profile(f):
         @wraps(f)
         def wrap(*args):
@@ -127,3 +134,4 @@ if __name__ == '__main__':
         pb.update(i)
         print(f'\rProgress {pb}', end='')
         time.sleep(0.1)
+
